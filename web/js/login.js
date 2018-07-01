@@ -7,32 +7,17 @@ function mascarasDosInputs() {
 //Função para exibir animações nos formulários
 function trocaTela(botao, formularioOut, formularioIn, formularioIn2) {
     $(botao).click(
-            function (e) {
-                e.preventDefault();
-                $(formularioOut).fadeOut(300);
-                setTimeout(function () {
+        function (e) {
+            e.preventDefault();
+            $(formularioOut).fadeOut(300);
+            setTimeout(function () {
                     $(formularioIn).fadeIn(300);
                     $(formularioIn2).fadeIn(300);
                 },
-                        300
-                        );
-            }
-    );
-}
-
-//Função que exibe mensagem de erro caso o dado inputado no campo não seja válido para o mesmo
-function mensagemDeErro(campo, span, regexp, mensagem) {
-    $(campo).on("input", function () {
-        if (this.value.match(regexp)) {
-            $(this).val(this.value.replace(regexp, ''));
-            $(span).text(mensagem);
-            $(span).hide();
-            $(span).fadeIn(1000);
-            setTimeout(function () {
-                $(span).fadeOut(1000);
-            }, 7000);
+                300
+            );
         }
-    });
+    );
 }
 
 //Função que ao clicar no botão mostrar senha ele mostra a senha
@@ -55,82 +40,100 @@ function mensagemEmailEnviado() {
     });
 }
 
-//Função que mostra mensagem de erro no login
-function erroLogin() {
-    $('#login').val($('#login-hidden').text());
-    if ($('#erro-hiden').text() === 'Usuário incorreto!') {
-        $('#login').focus();
-        $('#erro-login').text($('#erro-hiden').text());
-        $('#erro-login').show();
-        $('#login').on('input', function () {
-            setInterval(function () {
-                $('#erro-login').fadeOut(2000);
-            }, 2000);
-        });
-    } else if ($('#erro-hiden').text() === 'Senha incorreta!') {
-        $('#senha-login').focus();
-        $('#erro-senha-login').text($('#erro-hiden').text());
-        $('#erro-senha-login').show();
-        $('#senha-login').on('input', function () {
-            setInterval(function () {
-                $('#erro-senha-login').fadeOut(2000);
-            }, 2000);
-        });
-    }
+function verificaMatricula() {
+    $("#matricula").blur(function () {
+        const campoMatricula = $("#matricula");
+        const divErro = $("#erro-matricula");
+
+        // if (verificaCPF()) {
+
+        $.ajax({
+            url: "https://ifcommunity.herokuapp.com/user/verify",
+            type: "GET",
+            crossDomain: true,
+            timeout: 6000,
+            data: {
+                verifyString: campoMatricula.val()
+            },
+            beforeSend: function () {
+                $("#loading-matricula").show();
+            }
+        })
+            .done(function () {
+                $("#loading-matricula").hide();
+
+                campoMatricula.addClass("valid");
+                campoMatricula.removeClass("invalid");
+                campoMatricula.prop("aria-invalid", "false");
+
+                return true;
+            })
+            .fail(function (jqXHR, textStatus, body) {
+                $("#loading-matricula").hide();
+
+                if (jqXHR["status"] === 500) {
+                    alert("FUDEU QUE DEU PAU");
+                } else if (jqXHR["status"] === 403) {
+                    campoMatricula.addClass("invalid");
+                    campoMatricula.removeClass("valid");
+                    campoMatricula.prop("aria-invalid", "true");
+
+                    divErro.text("Matricula já cadastrada!");
+                    divErro.show();
+
+                    return false;
+                }
+            });
+        // }
+    });
 }
 
-//Função que mostra mensagem de erro no cadastro
-function erroCadastro() {
-    if ($('#erros-cadastro-hidden').text() !== "null") {
-        $('#erro-cadsatro-span').text($('#erros-cadastro-hidden').text() + " Tente logar com seu usuário ou efetuar novo cadastro!");
-        $('#erro-cadastro-span').show();
-    } else {
-        $('#div-erro-cadastro-span').remove();
-    }
-}
-
-//Função que valida a parte da matricula que é CPF
-function verificaCPF(span) {
-    if ($('#matricula').val() === "") {
-        return;
-    }
-
-    var cpf = $("#matricula").val();
-    var strCpf = cpf.split('-');
-    cpf = strCpf[0];
-    var digitoDigitado = eval(cpf.charAt(9) + cpf.charAt(10));
-    var soma1 = 0, soma2 = 0;
-    var vlr = 11;
-
-    for (i = 0; i < 9; i++) {
-        soma1 += eval(cpf.charAt(i) * (vlr - 1));
-        soma2 += eval(cpf.charAt(i) * vlr);
-        vlr--;
-    }
-
-    soma1 = (((soma1 * 10) % 11) === 10 ? 0 : ((soma1 * 10) % 11));
-    soma2 = (((soma2 + (2 * soma1)) * 10) % 11);
-
-    if (cpf === "11111111111" || cpf === "22222222222" || cpf ===
-            "33333333333" || cpf === "44444444444" || cpf === "55555555555" || cpf ===
-            "66666666666" || cpf === "77777777777" || cpf === "88888888888" || cpf ===
-            "99999999999" || cpf === "00000000000") {
-        var digitoGerado = null;
-    } else {
-        var digitoGerado = (soma1 * 10) + soma2;
-    }
-
-    if (digitoGerado !== digitoDigitado) {
-        $("#erro-matricula").text("Informe uma matrícula válida.");
-        $("#erro-matricula").show();
-        return false;
-    } else {
-        $("#erro-matricula").text("");
-        $("#erro-matricula").fadeOut(2000);
-    }
-
-    return true;
-}
+// Função que valida a parte da matricula que é CPF
+// function verificaCPF(span) {
+//     const campoMatricula = $("#matricula");
+//     const erroMatricula = $("#erro-matricula");
+//
+//     if (campoMatricula.val() === "") {
+//         return;
+//     }
+//
+//     let digitoGerado = null;
+//     let cpf = campoMatricula.val();
+//     let strCpf = cpf.split('-');
+//     cpf = strCpf[0];
+//     const digitoDigitado = eval(cpf.charAt(9) + cpf.charAt(10));
+//     let soma1 = 0, soma2 = 0;
+//     let vlr = 11;
+//
+//     for (i = 0; i < 9; i++) {
+//         soma1 += eval(cpf.charAt(i) * (vlr - 1));
+//         soma2 += eval(cpf.charAt(i) * vlr);
+//         vlr--;
+//     }
+//
+//     soma1 = (((soma1 * 10) % 11) === 10 ? 0 : ((soma1 * 10) % 11));
+//     soma2 = (((soma2 + (2 * soma1)) * 10) % 11);
+//
+//     if (cpf === "11111111111" || cpf === "22222222222" || cpf ===
+//         "33333333333" || cpf === "44444444444" || cpf === "55555555555" || cpf ===
+//         "66666666666" || cpf === "77777777777" || cpf === "88888888888" || cpf ===
+//         "99999999999" || cpf === "00000000000") {
+//         digitoGerado = null;
+//     } else {
+//         digitoGerado = (soma1 * 10) + soma2;
+//     }
+//
+//     if (digitoGerado !== digitoDigitado) {
+//         erroMatricula.text("Informe uma matrícula válida.");
+//         erroMatricula.show();
+//         return false;
+//     }
+//
+//     erroMatricula.text("");
+//     erroMatricula.hide;
+//
+//     return true;
+// }
 
 function validacaoFormulario(campo, span, regex, mensagem) {
     $(campo).on("blur", function () {
@@ -156,7 +159,7 @@ function validacaoFormulario(campo, span, regex, mensagem) {
                     $(span).text("Insira uma matrícula valida");
                     $(campo).addClass("erro-label-input");
                     $(campo).removeClass("sucesso-label-input");
-                } else if (verificaCPF() && /^[0-9]{11}-[1-9]{1,}$/.test($("#matricula").val())) {
+                } else if (verificaCPF() && /^[0-9]{11}-[1-9]{1,}$/.test($("#matricula").val()) && $("#erro-matricula").text() !== "Matricula já cadastrada!") {
                     $(span).fadeOut(2000);
                     $(campo).addClass("sucesso-label-input");
                     $(campo).removeClass("erro-label-input");
@@ -164,9 +167,9 @@ function validacaoFormulario(campo, span, regex, mensagem) {
             }
 
             if (/^[a-záàâãéèêíïóôõöúçñ]{3,}\s[a-záàâãéèêíïóôõöúçñ\s]+$/i.test($("#nome").val())
-                    && /^\(0?[1-9]{2}\)\s9?[0-9]{4}\-[0-9]{4}$/.test($("#telefone").val())
-                    && /^[0-9]{11}-[1-9]{1,}$/.test($("#matricula").val())
-                    && verificaCPF()) {
+                && /^\(0?[1-9]{2}\)\s9?[0-9]{4}\-[0-9]{4}$/.test($("#telefone").val())
+                && /^[0-9]{11}-[1-9]{1,}$/.test($("#matricula").val())
+                && verificaCPF()) {
                 $("#btn-cadastrar-proximo").removeClass("disabled");
             } else {
                 $("#btn-cadastrar-proximo").addClass("disabled");
@@ -211,54 +214,113 @@ function exibeRequisitosSenha() {
     });
 }
 
+// $("#form-cadastrar").submit(function (event) {
+//     event.preventDefault();
+//
+//     const login = $("#login").val();
+//     const senha = $("#senha-login").val();
+//
+//     $.ajax({
+//         url: "https://ifcommunity.herokuapp.com/user/register",
+//         type: "POST",
+//         contentType: "application/json",
+//         crossDomain: true,
+//         timeout: 10000,
+//         data: JSON.stringify({
+//             "user": login,
+//             "password": senha
+//         }),
+//         beforeSend: function () {
+//             $("#progressLogin").show();
+//         }
+//     })
+//         .done(function (usuario) {
+//             $("#progressLogin").hide();
+//
+//             $.session.set("usuario", JSON.stringify(usuario));
+//             location.replace("dashboard.html");
+//         })
+//         .fail(function (jqXHR, textStatus, body) {
+//             $("#progressLogin").hide();
+//
+//             if (jqXHR["status"] === 403) {
+//                 const divErro = $("#erro-login-span");
+//                 const campoLogin = $("#login");
+//                 const campoSenha = $("#senha-login");
+//
+//                 campoLogin.focus();
+//
+//                 campoLogin.addClass("invalid");
+//                 campoLogin.removeClass("valid");
+//                 campoLogin.prop("aria-invalid", "true");
+//
+//                 campoSenha.removeClass("valid");
+//                 campoSenha.addClass("invalid");
+//                 campoSenha.prop("aria-invalid", "true");
+//
+//                 divErro.text("Usuário ou senha incorreto!");
+//                 divErro.show();
+//             }
+//         });
+//
+// })
 
-$("#btn-login").click(function () {
+
+$("#form-login").submit(function (event) {
+    event.preventDefault();
+
     const login = $("#login").val();
     const senha = $("#senha-login").val();
+
     $.ajax({
         url: "https://ifcommunity.herokuapp.com/user/login",
         type: "POST",
         contentType: "application/json",
         crossDomain: true,
+        timeout: 10000,
         data: JSON.stringify({
             "user": login,
             "password": senha
         }),
         beforeSend: function () {
-            $("#progressLogin").css('visibility', 'visible');
+            $("#progressLogin").show();
         }
     })
-            .done(function (usuario) {
-                $("#progressLogin").css('visibility', 'hidden');
-                $.session.set("usuario", JSON.stringify(usuario));
-//
-//                console.log($.session.get("usuario"));
+        .done(function (usuario) {
+            $("#progressLogin").hide();
 
-                if ($.session.get('usuario') === 'undefined' || typeof ($.session.get('usuario')) === "undefined") {
-//                    console.log("undefined")
-//                    Não faz nada se n tiver sessão;
-                } else {
-//                    console.log("tem sessão")
-                    location.replace("dashboard.html");
-                }
-            })
-            .fail(function (jqXHR, textStatus, materia) {
-                if (jqXHR["status"] === 500) {
-                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                } else if (jqXHR["status"] === 502) {
-                    console.log("Erro 502, não foi possível estabelecer conexão!");
-                } else if (jqXHR["status"] === 404) {
-                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                }
-            });
+            $.session.set("usuario", JSON.stringify(usuario));
+            location.replace("dashboard.html");
+        })
+        .fail(function (jqXHR, textStatus, body) {
+            $("#progressLogin").hide();
+
+            if (jqXHR["status"] === 403) {
+                const divErro = $("#erro-login-span");
+                const campoLogin = $("#login");
+                const campoSenha = $("#senha-login");
+
+                campoLogin.focus();
+
+                campoLogin.addClass("invalid");
+                campoLogin.removeClass("valid");
+                campoLogin.prop("aria-invalid", "true");
+
+                campoSenha.removeClass("valid");
+                campoSenha.addClass("invalid");
+                campoSenha.prop("aria-invalid", "true");
+
+                divErro.text("Usuário ou senha incorreto!");
+                divErro.show();
+            }
+        });
+
 })
 
 
 //Call functions
 $(function () {
     mascarasDosInputs();
-    erroLogin();
-    erroCadastro();
     mensagemEmailEnviado();
     exibeRequisitosSenha();
 });
