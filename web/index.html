@@ -23,8 +23,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
 <script src="js/jquery.session.js"></script>
 <script>
-    if ($.session.get('usuario') !== undefined || typeof ($.session.get('usuario')) !== "undefined") {
-        if ($.session.get('usuario') == 'undefined') {
+    if ($.session.get("usuario") !== undefined || typeof ($.session.get("usuario")) !== "undefined") {
+        if ($.session.get("usuario") == "undefined") {
         } else {
             location.replace("dashboard.html");
         }
@@ -56,29 +56,29 @@
                     </div>
 
                     <div class="row">
-                        <div class='input-field col s12'>
-                            <input class='validate' type='text' name='login' id='login'/>
-                            <label for='login'>Login</label>
+                        <div class="input-field col s12">
+                            <input class="validate" type="text" name="login" id="login"/>
+                            <label for="login">Login</label>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class='input-field col s12'>
-                            <input class='validate' type='password' name='senha' id='senha-login'
+                        <div class="input-field col s12">
+                            <input class="validate" type="password" name="senha" id="senha-login"
                                    autocomplete="current-password"/>
                             <button type="button" id="mostrar-senha-login" class="btn-mostrar-senha"><i
                                     class="material-icons">remove_red_eye</i></button>
-                            <label for='senha-login'>Senha</label>
+                            <label for="senha-login">Senha</label>
                         </div>
 
                         <label class="esqueci-minha-senha">
-                            <a id="btn-esqueci-senha" class='red-text' href='#!'><b>Esqueci minha senha</b></a>
+                            <a id="btn-esqueci-senha" class="red-text" href="#!"><b>Esqueci minha senha</b></a>
                         </label>
                     </div>
 
                     <div class="row">
-                        <button id="btn-login" type='submit' name='btn-login'
-                                class='col s12 btn btn-large waves-effect indigo'>Login
+                        <button id="btn-login" type="submit" name="btn-login"
+                                class="col s12 btn btn-large waves-effect indigo">Login
                         </button>
                     </div>
                     <a href="" id="btn-criar-conta">Criar uma conta</a>
@@ -96,16 +96,16 @@
                         <h6 class="indigo-text lighten-3-text ">Insira seu email para recuperar sua senha!<br></h6>
                     </div>
                     <div class="row">
-                        <div class='input-field col s12'>
-                            <input class='validate' type='email' name='email' id='email-recuperar-senha' maxlength="60"
+                        <div class="input-field col s12">
+                            <input class="validate" type="email" name="email" id="email-recuperar-senha" maxlength="60"
                                    required/>
-                            <label for='email'>Email</label>
+                            <label for="email">Email</label>
                         </div>
                         <span id="texto-enviado-email"></span>
                     </div>
                     <div class="row">
-                        <button id="btn-esqueci-senha-submit" type='button' name='btn-esqueci-minha-submit'
-                                class='col s12 btn btn-large waves-effect indigo'>Enviar
+                        <button id="btn-esqueci-senha-submit" type="button" name="btn-esqueci-minha-submit"
+                                class="col s12 btn btn-large waves-effect indigo">Enviar
                         </button>
                     </div>
                     <a href="" id="btn-voltar-login">Voltar</a>
@@ -119,24 +119,24 @@
                         </div>
 
                         <div class="row">
-                            <div class='input-field col s12'>
-                                <input class='validate' type='text' name='nome' id='nome' minlength="3" maxlength="60"
+                            <div class="input-field col s12">
+                                <input class="validate" type="text" name="nome" id="nome" minlength="3" maxlength="60"
                                        required/>
-                                <label id="nome-cadastro" for='nome'>Nome Completo *</label>
+                                <label id="nome-cadastro" for="nome">Nome Completo *</label>
                                 <span id="erro-nome" class="erro-span"></span>
                             </div>
 
-                            <div class='input-field col s12'>
-                                <input class='validate telefone-mask' type='text' name='telefone' id='telefone'
+                            <div class="input-field col s12">
+                                <input class="validate telefone-mask" type="text" name="telefone" id="telefone"
                                        maxlength="18" required/>
-                                <label id="telefone-cadastro" for='telefone'>Celular *</label>
+                                <label id="telefone-cadastro" for="telefone">Celular *</label>
                                 <span id="erro-telefone" class="erro-span"></span>
 
                             </div>
-                            <div class='input-field col s9'>
-                                <input class='validate matricula-mask' type='text' name='matricula' id='matricula'
+                            <div class="input-field col s9">
+                                <input class="validate matricula-mask" type="text" name="matricula" id="matricula"
                                        minlength="13" maxlength="14" required/>
-                                <label for='matricula'>Matrícula *</label>
+                                <label for="matricula">Matrícula *</label>
 
                                 <div class="preloader-wrapper big active" id="loading-matricula">
                                     <div class="spinner-layer spinner-blue-only">
@@ -154,16 +154,16 @@
 
                                 <span id="erro-matricula" class="erro-span"></span>
                             </div>
-                            <div class='input-field col s3'>
-                                <input class='validate' type='number' name='periodo' id='periodo'
-                                       maxlength="2" min="1" max='12' value='1' required/>
-                                <label for='periodo'>Período</label>
+                            <div class="input-field col s3">
+                                <input class="validate" type="number" name="periodo" id="periodo"
+                                       maxlength="2" min="1" max="12" value="1" required/>
+                                <label for="periodo">Período</label>
                             </div>
                         </div>
 
                         <div class="row">
-                            <button id="btn-cadastrar-proximo" type='button' name='btn-cadastrar-proximo'
-                                    class='col s12 btn btn-large waves-effect indigo disabled'>Próximo
+                            <button id="btn-cadastrar-proximo" type="button" name="btn-cadastrar-proximo"
+                                    class="col s12 btn btn-large waves-effect indigo disabled">Próximo
                             </button>
                         </div>
                         <a href="" id="btn-voltar">Voltar</a>
@@ -171,28 +171,59 @@
 
                     <!-- FORM CADASTRAR 2a TELA -->
                     <div id="form-cadastro-2">
+                        <div id="progressCadastro" class="progress col s11 fundo-loading1">
+                            <div class="indeterminate fundo-loading2"></div>
+                        </div>
                         <div class="row row-titulo">
                             <h3 class="indigo-text">Finalizar cadastro</h3>
                         </div>
 
+
                         <div class="row">
-                            <div class='input-field col s12'>
-                                <input class='validate' type='email' name='email' id='email' maxlength="60" required/>
-                                <label for='email'>Email *</label>
+                            <div class="input-field col s12">
+                                <input class="validate" type="email" name="email" id="email" maxlength="60" required/>
+                                <label for="email">Email *</label>
                                 <span id="erro-email" class="erro-span"></span>
+                                <div class="preloader-wrapper big active" id="loading-email">
+                                    <div class="spinner-layer spinner-blue-only">
+                                        <div class="circle-clipper left">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="gap-patch">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="circle-clipper right">
+                                            <div class="circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class='input-field col s12'>
-                                <input class='validate' type='text' name='login-cadastro' id='login-cadastro'
+                            <div class="input-field col s12">
+                                <input class="validate" type="text" name="login-cadastro" id="login-cadastro"
                                        minlength="6" maxlength="20" required/>
-                                <label for='login-cadastro'>Usuário *</label>
+                                <label for="login-cadastro">Usuário *</label>
                                 <span id="erro-usuario" class="erro-span"></span>
+
+                                <div class="preloader-wrapper big active" id="loading-usuario">
+                                    <div class="spinner-layer spinner-blue-only">
+                                        <div class="circle-clipper left">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="gap-patch">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="circle-clipper right">
+                                            <div class="circle"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class='input-field col s12'>
-                                <input class='validate' type='password' name='senha' id='senha-cadastro' minlength="8"
+                            <div class="input-field col s12">
+                                <input class="validate" type="password" name="senha" id="senha-cadastro" minlength="8"
                                        maxlength="25" required/>
                                 <button type="button" id="mostrar-senha-cadastro" class="btn-mostrar-senha"><i
                                         class="material-icons">remove_red_eye</i></button>
-                                <label for='senha-cadastro'>Senha *</label>
+                                <label for="senha-cadastro">Senha *</label>
                                 <span id="erro-senha" class="erro-span"></span>
                                 <span id="requisito-senha-1" class="requisitos-senha">- No minímo 8 caractéres sendo 1 maiúsculo</span>
                                 <span id="requisito-senha-2" class="requisitos-senha">- No minímo 1 caractere especial (!@#%)... </span>
@@ -201,8 +232,8 @@
                         </div>
 
                         <div class="row">
-                            <button id="btn-cadastrar" type='submit' name='btn-cadastrar'
-                                    class='col s12 btn btn-large waves-effect indigo'>Cadastrar
+                            <button id="btn-cadastrar" type="submit" name="btn-cadastrar"
+                                    class="col s12 btn btn-large waves-effect indigo disabled">Cadastrar
                             </button>
                         </div>
                         <a href="" id="btn-voltar-tela-2">Voltar</a>

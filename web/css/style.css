@@ -104,7 +104,8 @@ body {
     overflow: hidden;
 }
 
-#body-login #progressLogin {
+#body-login #progressLogin,
+#body-login #progressCadastro {
     display: none;
     height: 6px;
     position: relative;
@@ -112,6 +113,10 @@ body {
     margin-top: -17px;
     margin-left: -48px;
     border-radius: 0;
+}
+
+#body-login #progressCadastro{
+    margin-top: -39px;
 }
 
 #body-login h3 {
@@ -302,7 +307,9 @@ h4 {
     background-color: rgb(63, 81, 181) !important;
 }
 
-#body-login #loading-matricula {
+#body-login #loading-matricula,
+#body-login #loading-usuario,
+#body-login #loading-email {
     position: absolute;
     width: 18px;
     height: 18px;
