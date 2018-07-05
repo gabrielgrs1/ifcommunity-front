@@ -1,32 +1,30 @@
-habilitaLikeDeslike();
-
-function habilitaLikeDeslike(){
-    $("#body-principal a.botao-curtida > i").click(function(){
-        const switchLikeDeslike = $(this).parent("a").siblings().children("i").attr("id");
+function habilitaLikeDeslike() {
+    $("#body-principal a.botao-curtida > i").click(function () {
+        let switchLikeDeslike = $(this).parent("a").siblings().children("i").attr("id");
         const usuario = $(jQuery.parseJSON($.session.get("usuario")));
         const idAuthor = usuario["0"].userId;
         const idPost = $(this).closest("li").attr("id");
         let isLike = 0;
         let isExclude = 0;
 
-        if($(this).hasClass("like") === true){
+        if ($(this).hasClass("like") === true) {
             isLike = 1;
-            if($(this).attr("id") === "true"){
+            if ($(this).attr("id") === "true") {
                 $(this).attr("id", false);
                 isExclude = 1;
             } else {
-                if (switchLikeDeslike === "true"){
+                if (switchLikeDeslike === "true") {
                     $(this).parent("a").siblings().children("i").attr("id", false);
                 }
             }
         }
 
-        if($(this).hasClass("deslike") === true){
-            if($(this).attr("id") === "true"){
+        if ($(this).hasClass("deslike") === true) {
+            if ($(this).attr("id") === "true") {
                 isExclude = 1;
                 $(this).attr("id", false);
             } else {
-                if (switchLikeDeslike === "true"){
+                if (switchLikeDeslike === "true") {
                     $(this).parent("a").siblings().children("i").attr("id", false);
                 }
                 $(this).attr("id", true);

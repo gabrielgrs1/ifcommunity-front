@@ -606,6 +606,7 @@ function montaPostagens(postagens) {
 
     trocaMaxMinBoxPostagens();
     habilitaClickParaAbrirComentarios();
+    habilitaLikeDeslike();
 }
 
 
