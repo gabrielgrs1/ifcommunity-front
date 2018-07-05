@@ -57,7 +57,7 @@
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <input class="validate" type="text" name="login" id="login"/>
+                            <input class="validate" type="text" name="login" id="login" autocomplete="username"/>
                             <label for="login">Login</label>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input class="validate" type="email" name="email" id="email-recuperar-senha" maxlength="60"
+                            <input class="validate" type="email" name="email" id="email-recuperar-senha" maxlength="60" autocomplete="email"
                                    required/>
                             <label for="email">Email</label>
                         </div>
@@ -120,14 +120,14 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <input class="validate" type="text" name="nome" id="nome" minlength="3" maxlength="60"
+                                <input class="validate" type="text" name="nome" id="nome" minlength="3" maxlength="60" autocomplete="name"
                                        required/>
                                 <label id="nome-cadastro" for="nome">Nome Completo *</label>
                                 <span id="erro-nome" class="erro-span"></span>
                             </div>
 
                             <div class="input-field col s12">
-                                <input class="validate telefone-mask" type="text" name="telefone" id="telefone"
+                                <input class="validate telefone-mask" type="text" name="telefone" id="telefone" autocomplete="tel-national"
                                        maxlength="18" required/>
                                 <label id="telefone-cadastro" for="telefone">Celular *</label>
                                 <span id="erro-telefone" class="erro-span"></span>
@@ -181,7 +181,7 @@
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <input class="validate" type="email" name="email" id="email" maxlength="60" required/>
+                                <input class="validate" type="email" name="email" id="email" maxlength="60" required autocomplete="email"/>
                                 <label for="email">Email *</label>
                                 <span id="erro-email" class="erro-span"></span>
                                 <div class="preloader-wrapper big active" id="loading-email">
@@ -219,7 +219,7 @@
                                 </div>
                             </div>
                             <div class="input-field col s12">
-                                <input class="validate" type="password" name="senha" id="senha-cadastro" minlength="8"
+                                <input class="validate" type="password" name="senha" id="senha-cadastro" minlength="8" autocomplete="current-password"
                                        maxlength="25" required/>
                                 <button type="button" id="mostrar-senha-cadastro" class="btn-mostrar-senha"><i
                                         class="material-icons">remove_red_eye</i></button>

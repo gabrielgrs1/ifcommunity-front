@@ -290,6 +290,12 @@ $("#form-login").submit(function (event) {
 
     const login = $("#login").val();
     const senha = $("#senha-login").val();
+    let ip = null;
+
+    $.get('http://jsonip.com', function (res) {
+        ip = res.ip;
+    });
+
 
     $.ajax({
         url: "https://ifcommunity.herokuapp.com/user/login",
@@ -299,7 +305,8 @@ $("#form-login").submit(function (event) {
         timeout: 10000,
         data: JSON.stringify({
             "user": login,
-            "password": senha
+            "password": senha,
+            "ip": ip
         }),
         beforeSend: function () {
             $("#progressLogin").show();
@@ -346,6 +353,11 @@ $("#form-cadastrar").submit(function (event) {
     const typeUser = 1;
     const period = $("#periodo").val();
     const enrolledNumber = $("#matricula").val();
+    let ip = null;
+
+    $.get('http://jsonip.com', function (res) {
+        ip = res.ip;
+    });
 
     $.ajax({
         url: "https://ifcommunity.herokuapp.com/user/register",
@@ -361,7 +373,8 @@ $("#form-cadastrar").submit(function (event) {
             "mail": mail,
             "typeUser": typeUser,
             "period": period,
-            "enrolledNumber": enrolledNumber
+            "enrolledNumber": enrolledNumber,
+            "ip": ip
         }),
         beforeSend: function () {
             $("#progressCadastro").show();
@@ -381,6 +394,7 @@ $("#form-cadastrar").submit(function (event) {
             }
         });
 });
+
 
 function verificaMatricula() {
     const campoMatricula = $("#matricula");
