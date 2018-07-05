@@ -72,6 +72,7 @@ $("#body-principal > nav > div > ul > li").click(function () {
 });
 
 /*------------------------------------------------------------------------*/
+
 //Função que mostra o "carregando" na tela.
 function carregando() {
     $("#progressGeral").show();
@@ -254,34 +255,34 @@ function pegaMateriasComAjax() {
             loading.append(li);
         }
     })
-            .done(function (materia) {
+        .done(function (materia) {
 //                console.log((materia));
-                loading.empty();
+            loading.empty();
 
-                $(jQuery.parseJSON(JSON.stringify(materia))).each(function () {
-                    var matterId = this.matterId;
-                    var matterName = this.matterName;
-                    var period = this.period;
+            $(jQuery.parseJSON(JSON.stringify(materia))).each(function () {
+                var matterId = this.matterId;
+                var matterName = this.matterName;
+                var period = this.period;
 //                    materias.push(matterId);
-                    materias.push(matterName);
+                materias.push(matterName);
 //                    materias.push(period);
-                });
-
-                preencheAListaDeMateriasDoMenu();
-                checkedNasMateriasDoMenu();
-
-            })
-            .fail(function (jqXHR, textStatus, materia) {
-                loading.empty();
-                if (jqXHR["status"] === 500) {
-                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                } else if (jqXHR["status"] === 502) {
-                    console.log("Erro 502, não foi possível estabelecer conexão!");
-                } else if (jqXHR["status"] === 404) {
-                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                }
-                preencheAListaDeMateriasDoMenu();
             });
+
+            preencheAListaDeMateriasDoMenu();
+            checkedNasMateriasDoMenu();
+
+        })
+        .fail(function (jqXHR, textStatus, materia) {
+            loading.empty();
+            if (jqXHR["status"] === 500) {
+                console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
+            } else if (jqXHR["status"] === 502) {
+                console.log("Erro 502, não foi possível estabelecer conexão!");
+            } else if (jqXHR["status"] === 404) {
+                console.log("Erro 404, não foi encontrado o diretório solicitado!");
+            }
+            preencheAListaDeMateriasDoMenu();
+        });
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -466,6 +467,7 @@ function qualLinguagemParaPostagem(text, IDPostagem) {
 function collapsible() {
     $('.collapsible').collapsible();
 }
+
 $('.collapsible').collapsible();
 
 function trocaMaxMinBoxPostagens() {
@@ -480,7 +482,7 @@ function trocaMaxMinBoxPostagens() {
 ;
 
 /*---------------------------------------------------------*/
-//Função que pega as postagems e armazena em um array
+//Função que pega as postagens e armazena em um array
 /*---------------------------------------------------------*/
 
 
@@ -535,30 +537,30 @@ function pegaPostagens(materia) {
             carregando();
         }
     })
-            .done(function (postagem) {
+        .done(function (postagem) {
 //                console.log(postagem);
-                postagens = [];
-                $("main > section.minhas-materias").empty();
+            postagens = [];
+            $("main > section.minhas-materias").empty();
 
-                postagens = postagem;
+            postagens = postagem;
 
-                $("#progressGeral").hide();
-                montaPostagens(postagens);
-            })
-            .fail(function (jqXHR, textStatus, postagem) {
+            $("#progressGeral").hide();
+            montaPostagens(postagens);
+        })
+        .fail(function (jqXHR, textStatus, postagem) {
 
 //                console.log(jqXHR);
 
-                M.toast({html: 'Erro ao recuperar postagens, contate um administrador!', classes: 'red'});
-                $("#progressGeral").hide();
-                if (jqXHR["status"] === 500) {
-                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                } else if (jqXHR["status"] === 502) {
-                    console.log("Erro 502, não foi possível estabelecer conexão!");
-                } else if (jqXHR["status"] === 404) {
-                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                }
-            });
+            M.toast({html: 'Erro ao recuperar postagens, contate um administrador!', classes: 'red'});
+            $("#progressGeral").hide();
+            if (jqXHR["status"] === 500) {
+                console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
+            } else if (jqXHR["status"] === 502) {
+                console.log("Erro 502, não foi possível estabelecer conexão!");
+            } else if (jqXHR["status"] === 404) {
+                console.log("Erro 404, não foi encontrado o diretório solicitado!");
+            }
+        });
 }
 
 
@@ -566,10 +568,18 @@ function pegaPostagens(materia) {
 
 //Função que prepara o texto da postagem e chama a fução que cria e adiciona na tela
 function montaPostagens(postagens) {
-//    console.log(postagens)
+    // console.log(postagens)
     $(".minhas-materias").empty();
     postagens.reverse();
+
+
     $(jQuery.parseJSON(JSON.stringify(postagens))).each(function (index) {
+        var likesManagement = controleLikes(postagens[index]);
+        var likes = likesManagement.split(';')[0];
+        var deslikes = likesManagement.split(';')[1];
+        var userLike = likesManagement.split(';')[2];
+        var userDeslike = likesManagement.split(';')[3];
+
         var x = index;
         var textoPostagem = this.postText;
         var autorPostagem = this.authorName;
@@ -579,8 +589,7 @@ function montaPostagens(postagens) {
         var IDPostagem = this.postId;
         var linguagemPostagem = this.programmingLanguage;
         var hashPhotoAutor = this.hashPhotoAutor;
-        // console.log(linguagemPostagem);
-        adicionaPostagens(textoPostagem, autorPostagem, tituloPostagem, dataPostagem, materiaPostagem, IDPostagem, x, hashPhotoAutor);
+        adicionaPostagens(textoPostagem, autorPostagem, tituloPostagem, dataPostagem, materiaPostagem, IDPostagem, x, hashPhotoAutor, likes, deslikes, userLike, userDeslike);
         collapsible();
         if (linguagemPostagem == 'selecione a linguagem') {
         } else {
@@ -597,10 +606,57 @@ function montaPostagens(postagens) {
 
     trocaMaxMinBoxPostagens();
     habilitaClickParaAbrirComentarios();
+    habilitaLikeDeslike();
+}
+
+
+function controleLikes(postagens) {
+    var usuario = $(jQuery.parseJSON($.session.get('usuario')));
+    var userId = usuario["0"].userId;
+    userId = userId.split(';')[1];
+
+    var likes = 0;
+    var deslikes = 0;
+    var userLike = false;
+    var userDeslike = false;
+
+    var concat = '';
+
+    /*   postagens.likeDeslikePosts.forEach(function (item) {*/
+    $(jQuery.parseJSON(JSON.stringify(postagens.likeDeslikePosts))).each(function (item) {
+        var idAuthor = this.idAuthor;
+        var idPost = this.idPost;
+        var isExclude = this.isExclude;
+        var isLike = this.isLike;
+
+        if (isLike == 1) {
+            likes++;
+            if (idAuthor == userId) {
+                if (userLike = true) {
+
+                } else {
+                    userLike = true;
+                }
+            }
+        } else if (isLike == 0) {
+            deslikes++;
+            if (idAuthor == userId) {
+                if (userDeslike = true) {
+
+                } else {
+                    userDeslike = true;
+                }
+            }
+        }
+    })
+
+    concat = likes + ';' + deslikes + ';' + userLike + ';' + userDeslike;
+
+    return concat;
 }
 
 //Função que adiciona a estrutura de postagem
-function adicionaPostagens(textoPostagem, autorPostagem, tituloPostagem, dataPostagem, materiaPostagem, IDPostagem, x, hashPhotoAutor) {
+function adicionaPostagens(textoPostagem, autorPostagem, tituloPostagem, dataPostagem, materiaPostagem, IDPostagem, x, hashPhotoAutor, likes, deslikes, userLike, userDeslike) {
 
     //Manipulação da data da postagem
     var temporarioData = dataPostagem.split(" ");
@@ -620,10 +676,10 @@ function adicionaPostagens(textoPostagem, autorPostagem, tituloPostagem, dataPos
     dataPostagem = "às " + horaPostagem + " " + dataPostagemTemp;
 
     var secaoDePostagens = $("main > section.minhas-materias");
-    
+
     // quando criar a regra de retorno do banco decide o prepend ou append.
-    secaoDePostagens.prepend('<ul class="collapsible content-topic z-depth-2 container row" data-collapsible="accordion" id="'+ IDPostagem +'">\n\
-    <li id="'+ IDPostagem +'">\n\
+    secaoDePostagens.prepend('<ul class="collapsible content-topic z-depth-2 container row" data-collapsible="accordion" id="' + IDPostagem + '">\n\
+    <li id="' + IDPostagem + '">\n\
         <div class="collapsible-header">\n\
             <ul class="container">\n\
                 <li>\n\
@@ -637,7 +693,7 @@ function adicionaPostagens(textoPostagem, autorPostagem, tituloPostagem, dataPos
                     <h4 class="center">' + tituloPostagem + '</h4>\n\
                 </li>\n\
                 <li class="postUserInfo">\n\
-                    <img class="responsive-img circle" alt="" src="'+ hashPhotoAutor +'">\n\
+                    <img class="responsive-img circle" alt="" src="' + hashPhotoAutor + '">\n\
                     <p class="right-align autor-postagem">' + autorPostagem + '<br><span class="data-postagem" id="data-hora-postagem-' + IDPostagem + '">' + dataPostagem + '</span></p>\n\
                     <p class="setinha-indicadora center"></p>\n\
                 </li>\n\
@@ -646,8 +702,8 @@ function adicionaPostagens(textoPostagem, autorPostagem, tituloPostagem, dataPos
         <div class="collapsible-body">\n\
             <pre id="editorLeitura' + IDPostagem + '" class="paraCodigoPostagens"> ' + textoPostagem + '</pre>\n\
             <div class="botoes-das-postagens col s12 row" id="' + IDPostagem + '">\n\
-                <div class="center-align col s9 onClikOpenComents">Comentários</div>\n\
-                <div class="right-align col s3"><a class="waves-effect waves-light btn right-align botao-curtida"><i class="material-icons left">thumb_up</i></a><a class="waves-effect waves-light btn right-align botao-curtida"><i class="material-icons left">thumb_down</i></a></div>\n\
+                <div class="center-align col s8 onClikOpenComents">Comentários</div>\n\
+                <div class="right-align col s4"><a class="waves-effect waves-light btn right-align botao-curtida like"><i id="' + userLike + '" class="material-icons left like">thumb_up</i>'+ likes + '</a><a class="waves-effect waves-light btn right-align botao-curtida"><i id="' + userDeslike + '" class="material-icons left deslike">thumb_down</i>' + deslikes + '</a></div>\n\
             </div>\n\
         </div>\n\
     </li>\n\
@@ -673,38 +729,38 @@ function retornaMaterias() {
             $("#section-materias #div-loading").show();
         }
     })
-            .done(function (materiasJSON) {
+        .done(function (materiasJSON) {
 
-                $("#section-materias #div-loading").hide();
-                periodoMateria = [];
+            $("#section-materias #div-loading").hide();
+            periodoMateria = [];
 
-                $(".adicionar-materias div.box-padrao .row > ul.collapsible").empty();
+            $(".adicionar-materias div.box-padrao .row > ul.collapsible").empty();
 
-                $(jQuery.parseJSON(JSON.stringify(materiasJSON))).each(function () {
-                    var matterId = this.matterId;
-                    var matterName = this.matterName;
-                    var period = this.period;
+            $(jQuery.parseJSON(JSON.stringify(materiasJSON))).each(function () {
+                var matterId = this.matterId;
+                var matterName = this.matterName;
+                var period = this.period;
 
-                    var materiaPeriodo = matterName + ";" + period;
+                var materiaPeriodo = matterName + ";" + period;
 //                    console.log(materiaPeriodo);
-                    periodoMateria.push(materiaPeriodo);
-                });
-
-                gerenciarMateriasConteudo();
-
-            })
-            .fail(function (jqXHR, textStatus, postagem) {
-                $("#section-materias #div-loading").slideUp(500);
-                M.Toast.dismissAll();
-                M.toast({html: 'Erro ao recuperar matérias, contate um administrador!', classes: 'red'});
-                if (jqXHR["status"] === 500) {
-                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                } else if (jqXHR["status"] === 502) {
-                    console.log("Erro 502, não foi possível estabelecer conexão!");
-                } else if (jqXHR["status"] === 404) {
-                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                }
+                periodoMateria.push(materiaPeriodo);
             });
+
+            gerenciarMateriasConteudo();
+
+        })
+        .fail(function (jqXHR, textStatus, postagem) {
+            $("#section-materias #div-loading").slideUp(500);
+            M.Toast.dismissAll();
+            M.toast({html: 'Erro ao recuperar matérias, contate um administrador!', classes: 'red'});
+            if (jqXHR["status"] === 500) {
+                console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
+            } else if (jqXHR["status"] === 502) {
+                console.log("Erro 502, não foi possível estabelecer conexão!");
+            } else if (jqXHR["status"] === 404) {
+                console.log("Erro 404, não foi encontrado o diretório solicitado!");
+            }
+        });
 }
 
 function gerenciarMateriasConteudo() {
@@ -865,7 +921,7 @@ function atualizaMaterias() {
             type: 'post',
             contentType: "application/json",
             crossDomain: true,
-             data: JSON.stringify({
+            data: JSON.stringify({
                 userId: userId,
                 matter1: materias[0],
                 matter2: materias[1],
@@ -879,19 +935,19 @@ function atualizaMaterias() {
                 // console.log("Atualizando as matérias");
             }
         })
-                .done(function (resultado) {
-                    M.toast({html: 'Matéria atualizada com sucesso!', classes: 'green'});
-                })
-                .fail(function (jqXHR, textStatus, resultado) {
-                    console.log(resultado)
-                    if (jqXHR["status"] === 500) {
-                        console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                    } else if (jqXHR["status"] === 502) {
-                        console.log("Erro 502, não foi possível estabelecer conexão!");
-                    } else if (jqXHR["status"] === 404) {
-                        console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                    }
-                });
+            .done(function (resultado) {
+                M.toast({html: 'Matéria atualizada com sucesso!', classes: 'green'});
+            })
+            .fail(function (jqXHR, textStatus, resultado) {
+                console.log(resultado)
+                if (jqXHR["status"] === 500) {
+                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
+                } else if (jqXHR["status"] === 502) {
+                    console.log("Erro 502, não foi possível estabelecer conexão!");
+                } else if (jqXHR["status"] === 404) {
+                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
+                }
+            });
     }
 }
 
@@ -997,37 +1053,37 @@ function atualizaPerfilAJAX(id, nome, telefone, email) {
             $("#section-perfil #div-loading").slideDown(500);
         }
     })
-            .done(function (alunoJSON) {
-                console.log(alunoJSON);
-                $("#section-perfil #div-loading").slideUp(500);
+        .done(function (alunoJSON) {
+            console.log(alunoJSON);
+            $("#section-perfil #div-loading").slideUp(500);
 
 //                $(jQuery.parseJSON(JSON.stringify(alunoJSON))).each(function () {
 //                    var name = this.name;
 //                });
 
-                //                Trata cache para nome
-                var usuario = $(jQuery.parseJSON($.session.get('usuario')));
-                usuario["0"].name = nome;
-                $.session.clear();
-                $.session.set("usuario", JSON.stringify(usuario));
+            //                Trata cache para nome
+            var usuario = $(jQuery.parseJSON($.session.get('usuario')));
+            usuario["0"].name = nome;
+            $.session.clear();
+            $.session.set("usuario", JSON.stringify(usuario));
 
-                atualizaNomePerfil();
-                M.toast({html: 'Perfil atualizado com sucesso!', classes: 'green'});
+            atualizaNomePerfil();
+            M.toast({html: 'Perfil atualizado com sucesso!', classes: 'green'});
 
-            })
-            .fail(function (jqXHR, textStatus, postagem) {
-                console.log(jqXHR);
-                $("#section-perfil #div-loading").slideUp(500);
-                if (jqXHR["status"] === 500) {
-                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                } else if (jqXHR["status"] === 502) {
-                    console.log("Erro 502, não foi possível estabelecer conexão!");
-                } else if (jqXHR["status"] === 404) {
-                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                }
+        })
+        .fail(function (jqXHR, textStatus, postagem) {
+            console.log(jqXHR);
+            $("#section-perfil #div-loading").slideUp(500);
+            if (jqXHR["status"] === 500) {
+                console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
+            } else if (jqXHR["status"] === 502) {
+                console.log("Erro 502, não foi possível estabelecer conexão!");
+            } else if (jqXHR["status"] === 404) {
+                console.log("Erro 404, não foi encontrado o diretório solicitado!");
+            }
 
-                M.toast({html: 'Erro ao atualizar o perfil, contate um administrador!', classes: 'red'});
-            });
+            M.toast({html: 'Erro ao atualizar o perfil, contate um administrador!', classes: 'red'});
+        });
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1062,8 +1118,8 @@ function validacaoFormulario(campo, span, regex, mensagem) {
             }
 
             if (/^[a-záàâãéèêíïóôõöúçñ]{3,}[a-záàâãéèêíïóôõöúçñ\s]+$/i.test($(".nome-perfil-dashboard").val())
-                    && /^\(0?[1-9]{2}\)\s9?[0-9]{4}\-[0-9]{4}$/.test($(".telefone-perfil-dashboard").val())
-                    && /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test($(".email-perfil-dashboard").val())) {
+                && /^\(0?[1-9]{2}\)\s9?[0-9]{4}\-[0-9]{4}$/.test($(".telefone-perfil-dashboard").val())
+                && /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test($(".email-perfil-dashboard").val())) {
                 $("#btn-atualizar-perfil").removeClass("disabled");
             } else {
                 $("#btn-atualizar-perfil").addClass("disabled");
@@ -1160,22 +1216,22 @@ function adicionaPostagemNoBanco(assunto, linguagem, conteudoDaPostagem, qualMat
             carregando();
         }
     })
-            .done(function (postagem) {
-                pegaPostagens(qualMateria);
-                limpaCamposPostagem();
-                M.toast({html: 'Postagem enviada com sucesso!', classes: 'green'});
-            })
-            .fail(function (jqXHR, textStatus, postagem) {
-                M.toast({html: 'Erro ao adicionar postagem, contate um administrador!', classes: 'red'});
-                $("#progressGeral").hide();
-                if (jqXHR["status"] === 500) {
-                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                } else if (jqXHR["status"] === 502) {
-                    console.log("Erro 502, não foi possível estabelecer conexão!");
-                } else if (jqXHR["status"] === 404) {
-                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                }
-            });
+        .done(function (postagem) {
+            pegaPostagens(qualMateria);
+            limpaCamposPostagem();
+            M.toast({html: 'Postagem enviada com sucesso!', classes: 'green'});
+        })
+        .fail(function (jqXHR, textStatus, postagem) {
+            M.toast({html: 'Erro ao adicionar postagem, contate um administrador!', classes: 'red'});
+            $("#progressGeral").hide();
+            if (jqXHR["status"] === 500) {
+                console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
+            } else if (jqXHR["status"] === 502) {
+                console.log("Erro 502, não foi possível estabelecer conexão!");
+            } else if (jqXHR["status"] === 404) {
+                console.log("Erro 404, não foi encontrado o diretório solicitado!");
+            }
+        });
 }
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1224,27 +1280,27 @@ function pegaIndicesAJAX() {
             $("#progressIndice").show();
         }
     })
-            .done(function (resultados) {
+        .done(function (resultados) {
 //                console.log(resultados);
-                $("#progressIndice").hide();
-                var resultadoIndices = [];
+            $("#progressIndice").hide();
+            var resultadoIndices = [];
 
-                resultadoIndices = resultados;
+            resultadoIndices = resultados;
 
-                preencheGraficos(resultadoIndices);
+            preencheGraficos(resultadoIndices);
 
-            })
-            .fail(function (jqXHR, textStatus, resultados) {
-                M.toast({html: 'Erro ao recuperar índices, contate um administrador!', classes: 'red'});
-                $("#progressGeral").hide();
-                if (jqXHR["status"] === 500) {
-                    console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
-                } else if (jqXHR["status"] === 502) {
-                    console.log("Erro 502, não foi possível estabelecer conexão!");
-                } else if (jqXHR["status"] === 404) {
-                    console.log("Erro 404, não foi encontrado o diretório solicitado!");
-                }
-            });
+        })
+        .fail(function (jqXHR, textStatus, resultados) {
+            M.toast({html: 'Erro ao recuperar índices, contate um administrador!', classes: 'red'});
+            $("#progressGeral").hide();
+            if (jqXHR["status"] === 500) {
+                console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
+            } else if (jqXHR["status"] === 502) {
+                console.log("Erro 502, não foi possível estabelecer conexão!");
+            } else if (jqXHR["status"] === 404) {
+                console.log("Erro 404, não foi encontrado o diretório solicitado!");
+            }
+        });
 }
 
 function preencheGraficos(resultadoIndices) {
@@ -1358,8 +1414,8 @@ function addSlice(id, sliceSize, pieElement, offset, sliceID, color) {
 
 function iterateSlices(id, sliceSize, pieElement, offset, dataCount, sliceCount, color) {
     var
-            maxSize = 179,
-            sliceID = "s" + dataCount + "-" + sliceCount;
+        maxSize = 179,
+        sliceID = "s" + dataCount + "-" + sliceCount;
 
     if (sliceSize <= maxSize) {
         addSlice(id, sliceSize, pieElement, offset, sliceID, color);
@@ -1371,11 +1427,11 @@ function iterateSlices(id, sliceSize, pieElement, offset, dataCount, sliceCount,
 
 function createPie(id) {
     var
-            listData = [],
-            listTotal = 0,
-            offset = 0,
-            i = 0,
-            pieElement = id + " .pie-chart__pie"
+        listData = [],
+        listTotal = 0,
+        offset = 0,
+        i = 0,
+        pieElement = id + " .pie-chart__pie"
     dataElement = id + " .pie-chart__legend"
 
     color = [

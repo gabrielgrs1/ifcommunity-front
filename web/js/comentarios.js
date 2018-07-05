@@ -7,6 +7,8 @@ function habilitaClickParaAbrirComentarios() {
         $('#modal-comentarios').modal('open');
         $('.divDosComentariosRealizados').empty();
         recuperaComentariosDaPostagem(idPostagem);
+        $('#caracteresRestantesComentario').text("Caracteres restantes: 600");
+        $('#caracteresRestantesComentario').css("color", "red");
     });
 }
 
@@ -47,7 +49,7 @@ function recuperaComentariosDaPostagem(idPostagem) {
 }
 
 function montaComentarios(comentarios) {
-//    console.log(comentarios);
+   // console.log(comentarios);
 
     sortResults(comentarios, 'commentId', false);
 
@@ -57,11 +59,12 @@ function montaComentarios(comentarios) {
         var authorName = this.authorName;
         var commentText = this.commentText;
         var postId = this.postId;
-        insereComentariosNaTela(commentId, registerDate, authorName, commentText, postId);
+        var authorPhoto = this.authorPhoto;
+        insereComentariosNaTela(commentId, registerDate, authorName, commentText, postId, authorPhoto);
     });
 }
 
-function insereComentariosNaTela(commentId, registerDate, authorName, commentText, postId) {
+function insereComentariosNaTela(commentId, registerDate, authorName, commentText, postId, authorPhoto) {
 //   2018-06-25 10:17:33.0
 //   ÀS 21:11 26/06/2018
 
@@ -82,7 +85,7 @@ function insereComentariosNaTela(commentId, registerDate, authorName, commentTex
     //Concatenação da data e hora manipulada
     registerDate = "às " + horaPostagem + " " + dataComentarioTemp;
 
-    $('.divDosComentariosRealizados').append('<div id=' + commentId + ' class="comentariosRealizadosPorUsuarios col s12 acessibilidade"><div id="nomeUsuarioComentario' + commentId + '" class="col s8">' + authorName + '</div><div id="dataComentario" class="col s4 right-align">' + registerDate + '</div><div id="Comentario" class="textoComentariosRealizados col s12">' + commentText + '</div></div>');
+    $('.divDosComentariosRealizados').append('<div id=' + commentId + ' class="comentariosRealizadosPorUsuarios col s12 acessibilidade"><div id="fotoUsuarioComentario' + commentId + '" class="col s2"><img class="responsive-img circle" alt="" src="'+ authorPhoto +'"></div><div id="nomeUsuarioComentario' + commentId + '" class="col s6">' + authorName + '</div><div id="dataComentario" class="col s4 right-align">' + registerDate + '</div><div id="Comentario" class="textoComentariosRealizados col s12">' + commentText + '</div></div>');
     $('.divDosComentariosRealizados').append('<div class="commentIdToPostId" id="' + postId + '"</div>');
 
 }
@@ -104,10 +107,17 @@ $('#textarea-comentarios').keyup(function () {
     var qtdCaract = 600 - commentSize;
     $('#caracteresRestantesComentario').text();
     $('#caracteresRestantesComentario').text("Caracteres restantes: " + qtdCaract);
+
+    if(qtdCaract > 550){
+        $('#caracteresRestantesComentario').css("color", "red");
+    } else {
+        $('#caracteresRestantesComentario').css("color", "green");
+    }
 })
 
 
-$('#btn-submeter-comentarios').click(function () {
+$('#btn-submeter-comentarios').click(function (e) {
+    e.preventDefault();
 
     var usuario = $(jQuery.parseJSON($.session.get('usuario')));
     var userId = usuario["0"].userId;
@@ -117,7 +127,7 @@ $('#btn-submeter-comentarios').click(function () {
 
     var commentSize = commentText.split('');
 
-    if (commentSize.length <= 600) {
+    if (commentSize.length <= 600 && commentSize.length >= 50) {
         ajaxToSendComment(userId, postId, commentText);
     }
 
@@ -131,7 +141,7 @@ function ajaxToSendComment(userId, postId, commentText) {
         crossDomain: true,
         data: JSON.stringify({
             postId: postId,
-            authorId: userId,
+            userId: userId,
             commentText: commentText
         }),
         beforeSend: function () {
@@ -142,10 +152,12 @@ function ajaxToSendComment(userId, postId, commentText) {
                 console.log(critica);
                 console.log(typeof (critica));
                 $("#progressComentarios").hide();
+                $("#textarea-comentarios").val('');
+                $('.divDosComentariosRealizados').empty();
                 recuperaComentariosDaPostagem(postId);
             })
             .fail(function (jqXHR, textStatus, postagem) {
-                M.toast('Erro ao postar comentário, contate um administrador!', 6000, 'red');
+                M.toast({html: 'Erro ao postar comentário, contate um administrador!', classes: 'red'});
                 $(".preloader-wrapper").hide();
                 if (jqXHR["status"] === 500) {
                     console.log("Erro 500, não foi possível estabelecer conexão com o servidor!");
