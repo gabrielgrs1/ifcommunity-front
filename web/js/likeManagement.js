@@ -16,6 +16,8 @@ function habilitaLikeDeslike() {
                 if (switchLikeDeslike === true) {
                     $(this).parent("a").siblings().children("i").attr("id", false);
                 }
+                $(this).attr("id", true);
+
             }
         }
 
