@@ -1,6 +1,5 @@
 habilitaLikeDeslike();
 
-
 function habilitaLikeDeslike(){
     $("#body-principal a.botao-curtida > i").click(function(){
         const switchLikeDeslike = $(this).parent("a").siblings().children("i").attr("id");
