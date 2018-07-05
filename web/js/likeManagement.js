@@ -13,7 +13,7 @@ function habilitaLikeDeslike() {
                 $(this).attr("id", false);
                 isExclude = 1;
             } else {
-                if (switchLikeDeslike === true) {
+                if (switchLikeDeslike == "true") {
                     $(this).parent("a").siblings().children("i").attr("id", false);
                 }
                 $(this).attr("id", true);
@@ -26,7 +26,7 @@ function habilitaLikeDeslike() {
                 isExclude = 1;
                 $(this).attr("id", false);
             } else {
-                if (switchLikeDeslike === true) {
+                if (switchLikeDeslike == "true") {
                     $(this).parent("a").siblings().children("i").attr("id", false);
                 }
                 $(this).attr("id", true);
